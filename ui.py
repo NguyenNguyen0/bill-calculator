@@ -17,10 +17,12 @@ class BillsUI:
         self.console.clear()
     
     def show_title(self):
-        # Create gradient title
-        figlet = Figlet(font="kban", justify="left", width=230)
+        self.console.print(Markdown("\n\n---\n\n"))
+        # kban, roman, epic, slant, doom, larry3d
+        figlet = Figlet(font="doom", justify="left", width=230)
         raw_title = figlet.renderText("BILLS-CALCULATOR")
 
+        # Create gradient title
         styled_title = Text()
         lines = raw_title.splitlines()
         total_lines = len(lines)
@@ -186,6 +188,7 @@ class BillsUI:
             return self.console.status(message, spinner="moon")
     
     def show_error(self, message):
+        self.console.print("\n")
         self.console.print(
             Panel(
                 f"[red]{message}[/red]",

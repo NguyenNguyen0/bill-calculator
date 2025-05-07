@@ -1,4 +1,3 @@
-import time
 import typer
 from typing import List, Optional
 import importlib.metadata
@@ -92,7 +91,6 @@ class BillsApp:
                     )
                 
                 people_list = self.ui.show_status("Calculating bills...", calculate)
-                time.sleep(1)  # Simulate calculation time
                 
                 # Update bills data with calculated people
                 bills_data.people = people_list

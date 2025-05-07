@@ -7,7 +7,7 @@ setup(
     long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     author="Nguyen Nguyen",
-    url="https://github.com/nguyenguyen0/calculate_electricity_bill",
+    url="https://github.com/NguyenNguyen0/calculate_electricity_bill",
     packages=find_packages(),
     python_requires=">=3.10",
     install_requires=[

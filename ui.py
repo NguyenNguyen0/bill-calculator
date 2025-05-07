@@ -1,4 +1,5 @@
 from datetime import datetime
+import time
 from rich.console import Console, Group
 from rich.prompt import Prompt
 from rich.table import Table
@@ -179,6 +180,7 @@ class BillsUI:
                 self.clear()
                 self.show_title()
                 result = action()
+                time.sleep(1)  # Simulate calculation time
                 return result
         else:
             return self.console.status(message, spinner="moon")

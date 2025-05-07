@@ -13,7 +13,7 @@ A Python-based application to calculate electricity and water bills for shared a
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/nguyenguyen0/calculate_electricity_bill.git
+   git clone https://github.com/NguyenNguyen0/calculate_electricity_bill.git
    cd calculate_electricity_bill
    ```
 
@@ -41,7 +41,7 @@ python -m app
 
 Example:
 ```bash
-python -m app --electric-bill 500000 --water-bill 200000 --people "Alice=2" "Bob=1"
+python .\__main__.py main --electric-bill 500000 --water-bill 200000 --people "Alice=2" "Bob=1"
 ```
 
 ## File Structure

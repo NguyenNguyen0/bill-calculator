@@ -11,6 +11,23 @@ def round_money(amount):
     return math.ceil(int(amount) / 100) * 100
 
 
+def print_result(results, electricity_bill=0, water_bill=0, month=0, year=0):
+    padding = "=" * 21
+    print(f"\n\n{Fore.BLUE} {padding} THÁNG {month} NĂM {year} {padding} {Fore.RESET}")
+    print(f"{"TIỀN ĐIỆN:":<25} {Fore.RED} {electricity_bill:>30,} {Fore.RESET} VNĐ")
+    print(f"{"TỔNG TIỀN ĐIỆN THU:":<25} {Fore.RED} {sum([float(result[1][:-4].replace(',', '')) for result in results]):>30,.0f} {Fore.RESET} VNĐ")
+    print(f"{"TIỀN NƯỚC:":<25} {Fore.RED} {water_bill:>30,} {Fore.RESET} VNĐ")
+    print(f"{"TỔNG TIỀN NƯỚC THU:":<25} {Fore.RED} {sum([float(result[2][:-4].replace(',', '')) for result in results]):>30,.0f} {Fore.RESET} VNĐ")
+    print(f"{Fore.BLUE} {"=" * 60}")
+    print(
+        tabulate(
+            results,
+            headers=["Người", "Tiền Điện ⚡", "Tiền Nước 💦", "Số Ngày Ở 🕛"],
+            tablefmt="grid",
+        )
+    )
+
+
 def calculate_bill():
     electricity_bill = 1_788_407
     water_bill = 0
@@ -56,20 +73,6 @@ def calculate_bill():
             ]
         )
 
-    padding = "=" * 21
-    print(f"\n\n{Fore.BLUE} {padding} THÁNG {month} NĂM {year} {padding} {Fore.RESET}")
-    print(f"{"TIỀN ĐIỆN:":<25} {Fore.RED} {electricity_bill:>30,} {Fore.RESET} VNĐ")
-    print(f"{"TỔNG TIỀN ĐIỆN THU:":<25} {Fore.RED} {sum([float(result[1][:-4].replace(',', '')) for result in results]):>30,.0f} {Fore.RESET} VNĐ")
-    print(f"{"TIỀN NƯỚC:":<25} {Fore.RED} {water_bill:>30,} {Fore.RESET} VNĐ")
-    print(f"{"TỔNG TIỀN NƯỚC THU:":<25} {Fore.RED} {sum([float(result[2][:-4].replace(',', '')) for result in results]):>30,.0f} {Fore.RESET} VNĐ")
-    print(f"{Fore.BLUE} {"=" * 60}")
-    print(
-        tabulate(
-            results,
-            headers=["Người", "Tiền Điện ⚡", "Tiền Nước 💦", "Số Ngày Ở 🕛"],
-            tablefmt="grid",
-        )
-    )
-
+    print_result(results=results, electricity_bill=electricity_bill, water_bill=water_bill, month=month, year=year)
 
 calculate_bill()

@@ -61,48 +61,41 @@ class BillsApp:
         people_list = []
         
         try:
-            while True:
-                # Get bills data
-                if not electric_bill and not water_bill:
-                    bills_data = self.ui.input_month_year_and_bills(date_now)
-                else:
-                    if date_now:
-                        year, month = self.ui.get_date_now()
-                    bills_data.year = year
-                    bills_data.month = month 
-                    bills_data.electricity = electric_bill
-                    bills_data.water = water_bill
+            # Get bills data
+            if not electric_bill and not water_bill:
+                bills_data = self.ui.input_month_year_and_bills(date_now)
+            else:
+                if date_now:
+                    year, month = self.ui.get_date_now()
+                bills_data.year = year
+                bills_data.month = month 
+                bills_data.electricity = electric_bill
+                bills_data.water = water_bill
 
-                # Get people data
-                if load_file:
-                    people_list = self.storage.load_people_info(load_file)
-                    if not people_list:
-                        self.ui.show_error("Không có người nào được tải từ file.")
-                        return
-                elif not people_input:
-                    people_list = self.ui.input_people_info()
-                else:
-                    people_list = self.calculator.parse_people_input(people_input)
+            # Get people data
+            if load_file:
+                people_list = self.storage.load_people_info(load_file)
+                if not people_list:
+                    self.ui.show_error("Không có người nào được tải từ file.")
+                    return
+            elif not people_input:
+                people_list = self.ui.input_people_info()
+            else:
+                people_list = self.calculator.parse_people_input(people_input)
 
-                # Calculate bills
-                def calculate():
-                    return self.calculator.calculate_bills(
-                        people_list, bills_data.electricity, bills_data.water
-                    )
-                
-                people_list = self.ui.show_status("Calculating bills...", calculate)
-                
-                # Update bills data with calculated people
-                bills_data.people = people_list
-                
-                # Display result
-                self.ui.display_result(bills_data)
-                
-                # Reset command line params for the next iteration
-                electric_bill = 0
-                water_bill = 0
-                people_input = None
-                load_file = None
+            # Calculate bills
+            def calculate():
+                return self.calculator.calculate_bills(
+                    people_list, bills_data.electricity, bills_data.water
+                )
+            
+            people_list = self.ui.show_status("Calculating bills...", calculate)
+            
+            # Update bills data with calculated people
+            bills_data.people = people_list
+            
+            # Display result
+            self.ui.display_result(bills_data)
                 
         except KeyboardInterrupt:
             if save_file:

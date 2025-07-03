@@ -84,15 +84,15 @@ class BillsUI:
             self.clear()
             self.show_title()
 
-            self.console.print(Markdown("# NHẬP TÊN VÀ SỐ NGÀY NGHỈ"))
+            self.console.print(Markdown("# NHẬP TÊN VÀ SỐ NGÀY Ở"))
 
             if people:
                 table = Table(show_header=True, header_style="bold magenta")
                 table.add_column("Người", justify="left")
-                table.add_column("Số Ngày Nghỉ 🕛", justify="center")
+                table.add_column("Số Ngày Ở 🕛", justify="center")
 
                 for person in people:
-                    table.add_row(person.name, str(person.days_off))
+                    table.add_row(person.name, str(person.stay_days))
 
                 self.console.print(
                     Panel(table, title="Danh sách người đã nhập", border_style="cyan")
@@ -114,9 +114,9 @@ class BillsUI:
                     continue
                 break
 
-            self.console.print(Markdown("\n> Số ngày nghỉ"))
-            days_off = int(Prompt.ask("", default="0"))
-            people.append(Person(name=name, days_off=days_off))
+            self.console.print(Markdown("\n> Số ngày ở"))
+            stay_days = int(Prompt.ask("", default="0"))
+            people.append(Person(name=name, stay_days=stay_days))
 
         return people
     
@@ -133,6 +133,7 @@ class BillsUI:
         self.console.print(Markdown(f"# THÁNG {month} NĂM {year}"))
 
         table = Table(show_header=True, header_style="bold magenta", show_lines=True)
+        table.add_column("ID", justify="right", style="bold")
         table.add_column("Người", justify="left", style="bold")
         if total_elec:
             table.add_column("Tiền Điện ⚡", justify="right")
@@ -140,8 +141,8 @@ class BillsUI:
             table.add_column("Tiền Nước 💦", justify="right")
         table.add_column("Số Ngày Ở 🕛", justify="center")
 
-        for p in people:
-            row = [p.name]
+        for i, p in enumerate(people):
+            row = [str(i), p.name]
             if total_elec:
                 row.append(f"{p.elec:,.0f} VNĐ")
             if total_water:
@@ -159,8 +160,8 @@ class BillsUI:
         group = Group(total_panel, detail_panel)
         self.console.print(group)
 
-        self.console.print(Markdown("> Nhấn **Q** để quay lại hoặc **Ctrl+C** để thoát."))
-        Prompt.ask("")
+        # self.console.print(Markdown("> Nhấn **Q** để quay lại hoặc **Ctrl+C** để thoát."))
+        # Prompt.ask("")
     
     def show_total(self, total_elec=0, total_elec_contrib=0, total_water=0, total_water_contrib=0):
         lines = []

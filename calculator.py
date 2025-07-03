@@ -4,6 +4,8 @@ from models import Person
 class BillsCalculator:
     @staticmethod
     def round_money(amount):
+        if amount < 1000:
+            return math.ceil(amount)
         return math.ceil(int(amount) / 100) * 100
     
     def calculate_bills(self, people, total_elec, total_water, total_days=30):
@@ -11,7 +13,6 @@ class BillsCalculator:
         # Calculate stay days for each person
         total_stay_days = 0
         for person in people:
-            person.calculate_stay_days(total_days)
             total_stay_days += person.stay_days
         
         # Calculate bills based on ratio of stay days
@@ -29,7 +30,7 @@ class BillsCalculator:
             if "=" in item:
                 try:
                     name, days = item.split("=")
-                    result.append(Person(name.strip(), int(days)))
+                    result.append(Person(name.strip(), stay_days=int(days)))
                 except ValueError:
                     raise ValueError(f"Invalid format: {item}. Use name=days or just name.")
             else:

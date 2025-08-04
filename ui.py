@@ -9,27 +9,28 @@ from rich.text import Text
 from pyfiglet import Figlet
 from models import Person, BillsData
 
+
 class BillsUI:
     def __init__(self):
         self.console = Console()
-    
+
     def clear(self):
         self.console.clear()
-    
+
     def show_title(self):
         self.console.print(Markdown("\n\n---\n\n"))
         # kban, roman, epic, slant, doom, larry3d
-        figlet = Figlet(font="doom", justify="left", width=230)
+        figlet = Figlet(font="doom", justify="left", width=180)
         raw_title = figlet.renderText("BILLS-CALCULATOR")
 
         # Create gradient title
         styled_title = Text()
         lines = raw_title.splitlines()
         total_lines = len(lines)
-        
-        start_color = (0, 255, 255)    # Cyan
-        end_color = (255, 0, 255)      # Magenta
-        
+
+        start_color = (0, 255, 255)  # Cyan
+        end_color = (255, 0, 255)  # Magenta
+
         for i, line in enumerate(lines):
             if total_lines > 1:
                 ratio = i / (total_lines - 1)
@@ -39,20 +40,20 @@ class BillsUI:
                 color = f"rgb({r},{g},{b})"
             else:
                 color = "rgb(128, 128, 255)"
-                
+
             styled_title.append(line + "\n", style=f"bold {color}")
 
         self.console.print(styled_title)
-    
+
     def format_money(self, label, amount, label_color="white"):
         label = f"[{label_color}]{label:<40}[/{label_color}]"
         money = f"[green]{amount:>15,.0f}  VNĐ[/green]"
         return f"{label}{money}"
-    
+
     def get_date_now(self):
         now = datetime.now()
         return now.year, now.month
-    
+
     def input_month_year_and_bills(self, date_now=False):
         self.clear()
         self.show_title()
@@ -77,7 +78,7 @@ class BillsUI:
         water = float(Prompt.ask("", default="0"))
 
         return BillsData(year=year, month=month, electricity=electricity, water=water)
-    
+
     def input_people_info(self):
         people = []
         while True:
@@ -119,14 +120,14 @@ class BillsUI:
             people.append(Person(name=name, stay_days=stay_days))
 
         return people
-    
+
     def display_result(self, bills_data):
         people = bills_data.people
         total_elec = bills_data.electricity
         total_water = bills_data.water
         year = bills_data.year
         month = bills_data.month
-        
+
         self.clear()
         self.show_title()
 
@@ -160,10 +161,9 @@ class BillsUI:
         group = Group(total_panel, detail_panel)
         self.console.print(group)
 
-        # self.console.print(Markdown("> Nhấn **Q** để quay lại hoặc **Ctrl+C** để thoát."))
-        # Prompt.ask("")
-    
-    def show_total(self, total_elec=0, total_elec_contrib=0, total_water=0, total_water_contrib=0):
+    def show_total(
+        self, total_elec=0, total_elec_contrib=0, total_water=0, total_water_contrib=0
+    ):
         lines = []
 
         if total_elec:
@@ -175,7 +175,7 @@ class BillsUI:
 
         panel = Panel("\n".join(lines), title="TỔNG TIỀN", border_style="yellow")
         return panel
-        
+
     def show_status(self, message, action=None):
         """Show a status message with a spinner"""
         if action:
@@ -187,7 +187,7 @@ class BillsUI:
                 return result
         else:
             return self.console.status(message, spinner="moon")
-    
+
     def show_error(self, message):
         self.console.print("\n")
         self.console.print(
@@ -196,6 +196,6 @@ class BillsUI:
                 border_style="red",
             )
         )
-        
+
     def show_success(self, message):
         self.console.print(Markdown(f"## **{message}**"), style="bold green")

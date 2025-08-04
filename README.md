@@ -24,24 +24,48 @@ A Python-based application to calculate electricity and water bills for shared a
 
 ## Usage
 
-Run the application using:
+### Method 1: Direct Python execution
 ```bash
-python -m app
+python main.py
+```
+
+### Method 2: After installation
+If you've installed the package (using `pip install .`), you can run:
+```bash
+bills-calculator
 ```
 
 ### Command-Line Options
 
-- `--electric-bill` or `-e`: Specify the total electricity bill.
-- `--water-bill` or `-w`: Specify the total water bill.
-- `--people` or `-p`: Provide a list of residents in the format `name=days_off` or just `name`.
+- `--electric-bill` or `-e`: Specify the total electricity bill (VNĐ).
+- `--water-bill` or `-w`: Specify the total water bill (VNĐ).
+- `--people` or `-p`: Provide a list of residents in the format `name=stay_days` or just `name`.
 - `--load-file` or `-lf`: Load resident data from a file.
 - `--save-file` or `-sf`: Save resident data to a file.
 - `--date-now` or `-dn`: Use the current date for calculations.
-- `--month` or `-m` and `--year` or `-y`: Specify the billing month and year.
+- `--month` or `-m`: Specify the billing month.
+- `--year` or `-y`: Specify the billing year.
 
-Example:
+### Examples
+
+**Interactive mode (no arguments):**
 ```bash
-python .\__main__.py main --electric-bill 500000 --water-bill 200000 --people "Alice=2" "Bob=1"
+python main.py
+```
+
+**With command-line arguments:**
+```bash
+python main.py --electric-bill 500000 --water-bill 200000 --people "Alice=25" "Bob=28" --date-now
+```
+
+**Load people from file:**
+```bash
+python main.py --electric-bill 500000 --water-bill 200000 --load-file people.txt
+```
+
+**Save people to file (use Ctrl+C to trigger save):**
+```bash
+python main.py --electric-bill 500000 --water-bill 200000 --people "Alice=25" "Bob=28" --save-file people.txt
 ```
 
 ## File Structure
@@ -57,10 +81,6 @@ python .\__main__.py main --electric-bill 500000 --water-bill 200000 --people "A
 
 - Python 3.10+
 - Dependencies listed in `requirements.txt`
-
-## Contributing
-
-Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## License
 

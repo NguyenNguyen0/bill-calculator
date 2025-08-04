@@ -16,8 +16,9 @@ class BillsApp:
         self._setup_app()
     
     def _setup_app(self):
-        @self.app.command("main")
-        def run(
+        @self.app.callback(invoke_without_command=True)
+        def main(
+            ctx: typer.Context,
             date_now: bool = typer.Option(False, "--date-now", "-dn", help="Sử dụng ngày hiện tại"),
             month: Optional[int] = typer.Option(None, "--month", "-m", help="Tháng tính tiền"),
             year: Optional[int] = typer.Option(None, "--year", "-y", help="Năm tính tiền"),
@@ -27,24 +28,23 @@ class BillsApp:
             load_file: Optional[str] = typer.Option(None, "--load-file", "-lf", help="Tải danh sách người từ file"),
             save_file: Optional[str] = typer.Option(None, "--save-file", "-sf", help="Lưu danh sách người vào file"),
         ):
-            self._run_app(
-                date_now=date_now,
-                month=month,
-                year=year,
-                electric_bill=electric_bill,
-                water_bill=water_bill,
-                people_input=people,
-                load_file=load_file,
-                save_file=save_file
-            )
-        
-        @self.app.callback()
-        def callback():
             try:
                 version = importlib.metadata.version("bills-calculator")
                 typer.echo(f"Bills Calculator v{version}")
             except importlib.metadata.PackageNotFoundError:
                 typer.echo("Bills Calculator")
+            
+            if ctx.invoked_subcommand is None:
+                self._run_app(
+                    date_now=date_now,
+                    month=month,
+                    year=year,
+                    electric_bill=electric_bill,
+                    water_bill=water_bill,
+                    people_input=people,
+                    load_file=load_file,
+                    save_file=save_file
+                )
     
     def _run_app(
         self,

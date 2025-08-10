@@ -2,6 +2,8 @@
 
 A Python-based application to calculate electricity and water bills for shared accommodations. The app distributes costs based on individual stay durations.
 
+![App demo](./calculating-cli.gif "App demo")
+
 ## Features
 
 - Calculate electricity and water bills proportionally based on stay days.

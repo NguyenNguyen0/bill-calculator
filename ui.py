@@ -47,7 +47,7 @@ class BillsUI:
 
     def format_money(self, label, amount, label_color="white"):
         label = f"[{label_color}]{label:<40}[/{label_color}]"
-        money = f"[green]{amount:>15,.0f}  VNĐ[/green]"
+        money = f"[green]{amount:>15,.0f}  VNĐ[/green]💸"
         return f"{label}{money}"
 
     def get_date_now(self):
@@ -143,7 +143,7 @@ class BillsUI:
         table.add_column("Số Ngày Ở 🕛", justify="center")
 
         for i, p in enumerate(people):
-            row = [str(i), p.name]
+            row = [str(i + 1), p.name]
             if total_elec:
                 row.append(f"{p.elec:,.0f} VNĐ")
             if total_water:

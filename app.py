@@ -19,7 +19,6 @@ class BillsApp:
         @self.app.callback(invoke_without_command=True)
         def main(
             ctx: typer.Context,
-            date_now: bool = typer.Option(False, "--date-now", "-dn", help="Sử dụng ngày hiện tại"),
             month: Optional[int] = typer.Option(None, "--month", "-m", help="Tháng tính tiền"),
             year: Optional[int] = typer.Option(None, "--year", "-y", help="Năm tính tiền"),
             electric_bill: float = typer.Option(0, "--electric-bill", "-e", help="Tiền điện (VNĐ)"),
@@ -36,7 +35,6 @@ class BillsApp:
             
             if ctx.invoked_subcommand is None:
                 self._run_app(
-                    date_now=date_now,
                     month=month,
                     year=year,
                     electric_bill=electric_bill,
@@ -48,7 +46,6 @@ class BillsApp:
     
     def _run_app(
         self,
-        date_now=False,
         month=None,
         year=None,
         electric_bill=0,
@@ -59,7 +56,8 @@ class BillsApp:
     ):
         bills_data = BillsData()
         people_list = []
-        
+        date_now = year is None and month is None
+
         try:
             # Get bills data
             if not electric_bill and not water_bill:

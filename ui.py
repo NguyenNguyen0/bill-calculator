@@ -121,15 +121,43 @@ class BillsUI:
 
         return people
 
+    def input_algorithm_selection(self):
+        """Allow user to select calculation algorithm interactively"""
+        self.console.print(Markdown("\n## Chọn thuật toán tính tiền"))
+        self.console.print(Markdown("1. **Tỷ lệ** (mặc định): Chia tiền theo tỷ lệ số ngày ở"))
+        self.console.print(Markdown("2. **Bậc thang**: Người ở ít nhất trả cùng mức cơ bản, phần thêm chia đều"))
+        
+        choice = Prompt.ask(
+            "Chọn thuật toán",
+            choices=["1", "2"],
+            default="1"
+        )
+        
+        return "ratio" if choice == "1" else "stair"
+
+    def show_algorithm_info(self, algorithm, algorithm_name):
+        """Show information about the selected algorithm"""
+        self.console.print(f"\n[bold cyan]Sử dụng {algorithm_name}[/bold cyan]")
+        
+        if algorithm == "stair":
+            self.console.print("[dim]Thuật toán bậc thang: Người ở ít ngày nhất trả cùng mức cơ bản, số ngày thêm sẽ chia đều số tiền còn lại.[/dim]")
+        else:
+            self.console.print("[dim]Thuật toán tỷ lệ: Chia tiền theo tỷ lệ số ngày ở của mỗi người.[/dim]")
+
     def display_result(self, bills_data):
         people = bills_data.people
         total_elec = bills_data.electricity
         total_water = bills_data.water
         year = bills_data.year
         month = bills_data.month
+        algorithm = getattr(bills_data, 'algorithm', 'ratio')
 
         self.clear()
         self.show_title()
+
+        # Show algorithm information
+        algorithm_name = "Bậc Thang" if algorithm == "stair" else "Tỷ Lệ"
+        self.console.print(f"[bold cyan]Thuật toán: {algorithm_name}[/bold cyan]")
 
         self.console.print(Markdown(f"# THÁNG {month} NĂM {year}"))
 

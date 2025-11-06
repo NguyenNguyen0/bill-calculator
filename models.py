@@ -26,9 +26,10 @@ class Person:
 
 
 class BillsData:
-    def __init__(self, year=None, month=None, electricity=0, water=0, people=None):
+    def __init__(self, year=None, month=None, electricity=0, water=0, people=None, algorithm="ratio"):
         self.year = year
         self.month = month
         self.electricity = electricity
         self.water = water
         self.people = people if people else []
+        self.algorithm = algorithm

@@ -33,6 +33,8 @@ class BillsApp:
             export_format: Optional[str] = typer.Option(None, "--export", "-x", help="Xuất kết quả ra txt hoặc csv"),
             no_history: bool = typer.Option(False, "--no-history", help="Không lưu lịch sử tính tiền"),
             algorithm: str = typer.Option("ratio", "--algorithm", "-a", help="Thuật toán tính tiền: 'ratio' (mặc định), 'stair' hoặc 'equal'"),
+            tui: bool = typer.Option(False, "--tui", help="Chạy giao diện TUI (Textual)"),
+            legacy_ui: bool = typer.Option(False, "--legacy-ui", help="Dùng giao diện interactive cũ"),
         ):
             try:
                 version = importlib.metadata.version("bills-calculator")
@@ -41,6 +43,33 @@ class BillsApp:
                 typer.echo("Bills Calculator")
             
             if ctx.invoked_subcommand is None:
+                has_cli_input = any(
+                    [
+                        month is not None,
+                        year is not None,
+                        electric_bill is not None,
+                        water_bill is not None,
+                        bool(people),
+                        bool(load_file),
+                        bool(save_file),
+                        bool(export_format),
+                        no_history,
+                        algorithm != "ratio",
+                    ]
+                )
+
+                if not legacy_ui and (tui or not has_cli_input):
+                    try:
+                        from .tui_app import BillsTextualApp
+                    except ImportError:
+                        self.ui.show_error(
+                            "Không tìm thấy thư viện textual. Hãy cài dependency rồi thử lại."
+                        )
+                        return
+
+                    BillsTextualApp().run()
+                    return
+
                 self._run_app(
                     month=month,
                     year=year,

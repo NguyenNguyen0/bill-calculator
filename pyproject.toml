@@ -10,10 +10,11 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "rich",
+    "textual>=0.63.0",
     "pyfiglet",
-    "typer[all]",
+    "typer",
     "pyinstaller",
-    "pyperclip>=1.11.0",
+    "pyperclip>=1.8.2",
 ]
 
 [project.scripts]

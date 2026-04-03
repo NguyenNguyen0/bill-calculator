@@ -7,7 +7,11 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.text import Text
 from pyfiglet import Figlet
-import pyperclip
+
+try:
+    import pyperclip
+except ImportError:  # pragma: no cover - depends on runtime environment
+    pyperclip = None
 from .models import Person, BillsData
 
 
@@ -284,4 +288,6 @@ class BillsUI:
         return "\n".join(lines)
 
     def copy_text_to_clipboard(self, text):
+        if pyperclip is None:
+            raise ValueError("Clipboard chưa sẵn sàng. Hãy cài pyperclip để dùng tính năng copy.")
         pyperclip.copy(text)

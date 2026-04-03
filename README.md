@@ -6,6 +6,7 @@
 
 ## ✨ Features
 
+- 🖥️ **Textual TUI (mặc định)**: Giao diện interactive thực thụ với bố cục đa vùng, bảng dữ liệu, activity log và phím tắt.
 - 🧮 **Multiple Calculation Algorithms**: Choose between ratio-based or stair-step algorithms for fair cost distribution.
 - 📊 **Ratio Algorithm** (default): Distributes costs proportionally based on each person's stay days.
 - 📈 **Stair Algorithm**: Ensures everyone pays a base amount for minimum stay days, then distributes remaining costs based on extra days.
@@ -42,6 +43,8 @@
 python -m bills_calculator
 ```
 
+Lệnh trên sẽ mở TUI mới (Textual) theo mặc định.
+
 ### Method 2: 📦 After installation
 If you've installed the package into your environment, you can run:
 ```bash
@@ -49,6 +52,9 @@ bills-calculator
 ```
 
 ### ⚙️ Command-Line Options
+
+- 🖥️ `--tui`: Bắt buộc mở TUI Textual.
+- 🧷 `--legacy-ui`: Dùng giao diện interactive cũ (Rich + prompt).
 
 - 🔌 `--electric-bill` or `-e`: Specify the total electricity bill (VNĐ).
 - 💧 `--water-bill` or `-w`: Specify the total water bill (VNĐ).
@@ -61,6 +67,23 @@ bills-calculator
 - 🚫 `--no-history`: Tắt lưu lịch sử tự động.
 - 📅 `--month` or `-m`: Specify the billing month.
 - 🗓️ `--year` or `-y`: Specify the billing year.
+
+## 🧭 Textual TUI Quick Guide
+
+- Khu trái: nhập tháng/năm, tiền điện/nước, thuật toán, quản lý danh sách người ở.
+- Khu phải: preview kết quả (Rich table), bảng lịch sử, activity log thời gian thực.
+- Lưu/Tải người ở qua file path nhập trực tiếp trong UI.
+
+### ⌨️ Keyboard Shortcuts
+
+- `Ctrl+Enter`: Tính tiền
+- `Ctrl+S`: Lưu danh sách người
+- `Ctrl+L`: Tải danh sách người
+- `Ctrl+E`: Export TXT
+- `Ctrl+H`: Refresh lịch sử
+- `Ctrl+R`: Reset form
+- `Ctrl+C`: Copy kết quả
+- `Q`: Thoát app
 
 ## 🧮 Calculation Algorithms
 

@@ -13,6 +13,7 @@ dependencies = [
     "pyfiglet",
     "typer[all]",
     "pyinstaller",
+    "pyperclip>=1.11.0",
 ]
 
 [project.scripts]

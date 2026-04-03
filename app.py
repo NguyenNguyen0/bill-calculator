@@ -6,12 +6,16 @@ from models import BillsData
 from ui import BillsUI
 from calculator import BillsCalculator
 from storage import Storage
+from exporter import BillsExporter
+from history import BillsHistory
 
 class BillsApp:
     def __init__(self):
         self.ui = BillsUI()
         self.calculator = BillsCalculator()
         self.storage = Storage()
+        self.exporter = BillsExporter()
+        self.history = BillsHistory()
         self.app = typer.Typer()
         self._setup_app()
     
@@ -26,6 +30,8 @@ class BillsApp:
             people: Optional[List[str]] = typer.Option(None, "--people", "-p", help="Danh sách tên hoặc tên=ngày nghỉ"),
             load_file: Optional[str] = typer.Option(None, "--load-file", "-lf", help="Tải danh sách người từ file"),
             save_file: Optional[str] = typer.Option(None, "--save-file", "-sf", help="Lưu danh sách người vào file"),
+            export_format: Optional[str] = typer.Option(None, "--export", "-x", help="Xuất kết quả ra txt hoặc csv"),
+            no_history: bool = typer.Option(False, "--no-history", help="Không lưu lịch sử tính tiền"),
             algorithm: str = typer.Option("ratio", "--algorithm", "-a", help="Thuật toán tính tiền: 'ratio' (mặc định), 'stair' hoặc 'equal'"),
         ):
             try:
@@ -43,8 +49,26 @@ class BillsApp:
                     people_input=people,
                     load_file=load_file,
                     save_file=save_file,
+                    export_format=export_format,
+                    no_history=no_history,
                     algorithm=algorithm
                 )
+
+        @self.app.command()
+        def history(
+            year: Optional[int] = typer.Option(None, "--year", "-y", help="Lọc theo năm"),
+            month: Optional[int] = typer.Option(None, "--month", "-m", help="Lọc theo tháng"),
+        ):
+            if year is not None and month is not None:
+                entries = self.history.get_by_month(year, month)
+            else:
+                entries = self.history.load_all()
+
+            if not entries:
+                self.ui.show_error("Chưa có lịch sử tính tiền.")
+                return
+
+            self._display_history(entries)
     
     def _run_app(
         self,
@@ -55,6 +79,8 @@ class BillsApp:
         people_input=None,
         load_file=None,
         save_file=None,
+        export_format=None,
+        no_history=False,
         algorithm="ratio"
     ):
         bills_data = BillsData()
@@ -133,11 +159,56 @@ class BillsApp:
                 if self.ui.confirm("Bạn có muốn lưu danh sách không?", default="n"):
                     self.storage.save_people_info(people_list)
                     self.ui.show_success("Đã lưu danh sách người vào file mặc định!")
+
+            if export_format:
+                export_format = export_format.lower()
+                if export_format == "txt":
+                    exported_file = self.exporter.export_txt(bills_data, "dist/exports/bills_result.txt")
+                elif export_format == "csv":
+                    exported_file = self.exporter.export_csv(bills_data, "dist/exports/bills_result.csv")
+                else:
+                    self.ui.show_error("Chỉ hỗ trợ export txt hoặc csv.")
+                    return
+                self.ui.show_success(f"Đã export kết quả ra file: {exported_file}")
+
+            if not no_history:
+                self.history.save(bills_data)
+
+            if not people_input and not load_file:
+                if self.ui.confirm("Copy kết quả vào clipboard?", default="n"):
+                    self.ui.copy_text_to_clipboard(self.ui.format_result_text(bills_data))
+                    self.ui.show_success("Đã copy kết quả vào clipboard!")
                 
         except ValueError as exc:
             self.ui.show_error(str(exc))
         except KeyboardInterrupt:
             self.ui.show_error("Chương trình đã thoát!")
+
+    def _display_history(self, entries):
+        from rich.panel import Panel
+        from rich.table import Table
+
+        table = Table(show_header=True, header_style="bold magenta", show_lines=True)
+        table.add_column("Saved At", style="bold")
+        table.add_column("Month", justify="center")
+        table.add_column("Year", justify="center")
+        table.add_column("Algorithm", justify="center")
+        table.add_column("People", justify="right")
+        table.add_column("Electricity", justify="right")
+        table.add_column("Water", justify="right")
+
+        for entry in entries:
+            table.add_row(
+                str(entry.get("saved_at", "")),
+                str(entry.get("month", "")),
+                str(entry.get("year", "")),
+                str(entry.get("algorithm", "")),
+                str(len(entry.get("people", []))),
+                f"{entry.get('electricity', 0):,.0f} VNĐ",
+                f"{entry.get('water', 0):,.0f} VNĐ",
+            )
+
+        self.ui.console.print(Panel(table, title="LỊCH SỬ TÍNH TIỀN", border_style="cyan"))
     
     def run(self):
         self.app()

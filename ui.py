@@ -7,6 +7,7 @@ from rich.markdown import Markdown
 from rich.panel import Panel
 from rich.text import Text
 from pyfiglet import Figlet
+import pyperclip
 from models import Person, BillsData
 
 
@@ -266,3 +267,21 @@ class BillsUI:
 
     def show_success(self, message):
         self.console.print(Markdown(f"## **{message}**"), style="bold green")
+
+    def format_result_text(self, bills_data):
+        lines = []
+        lines.append(f"Bills Calculator - Thang {bills_data.month} Nam {bills_data.year}")
+        lines.append(f"Algorithm: {getattr(bills_data, 'algorithm', 'ratio')}")
+        lines.append("")
+        lines.append(f"{'Name':<20}{'Stay Days':>10}{'Elec':>15}{'Water':>15}{'Total':>15}")
+
+        for person in bills_data.people:
+            total = person.elec + person.water
+            lines.append(
+                f"{person.name:<20}{person.stay_days:>10}{person.elec:>15,.0f}{person.water:>15,.0f}{total:>15,.0f}"
+            )
+
+        return "\n".join(lines)
+
+    def copy_text_to_clipboard(self, text):
+        pyperclip.copy(text)

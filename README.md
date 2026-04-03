@@ -13,6 +13,9 @@
 - 💾 Save and load resident data for reuse.
 - 🎨 Interactive command-line interface with rich text formatting and algorithm selection.
 - ⚡ Real-time algorithm information and calculation status.
+- 📦 Export kết quả ra TXT/CSV.
+- 🕘 Lưu lịch sử tính tiền vào `data/history.json`.
+- 📋 Copy kết quả dạng plain text vào clipboard.
 
 ## 🚀 Installation
 
@@ -53,6 +56,9 @@ bills-calculator
 - 🧮 `--algorithm` or `-a`: Choose calculation algorithm: `ratio` (default), `stair`, or `equal`.
 - 📂 `--load-file` or `-lf`: Load resident data from a file.
 - 💾 `--save-file` or `-sf`: Save resident data to a file.
+- 📤 `--export` or `-x`: Export kết quả ra `txt` hoặc `csv`.
+- 🕘 `history`: Xem lịch sử tính tiền đã lưu.
+- 🚫 `--no-history`: Tắt lưu lịch sử tự động.
 - 📅 `--month` or `-m`: Specify the billing month.
 - 🗓️ `--year` or `-y`: Specify the billing year.
 
@@ -109,6 +115,18 @@ python -m bills_calculator -e 1000000 -w 500000 -p "Alice=25" -p "Bob=30" -a rat
 
 # Stair algorithm  
 python -m bills_calculator -e 1000000 -w 500000 -p "Alice=25" -p "Bob=30" -a stair
+```
+
+**📤 Export kết quả:**
+```bash
+python -m bills_calculator -e 1000000 -w 500000 -p "Alice=25" -p "Bob=30" --export txt
+python -m bills_calculator -e 1000000 -w 500000 -p "Alice=25" -p "Bob=30" --export csv
+```
+
+**🕘 Xem lịch sử:**
+```bash
+python -m bills_calculator history
+python -m bills_calculator history --year 2026 --month 4
 ```
 
 ## 📁 File Structure

@@ -37,3 +37,13 @@ class BillsData:
         self.water = water
         self.people = people if people else []
         self.algorithm = algorithm
+
+    def to_dict(self):
+        return {
+            "year": self.year,
+            "month": self.month,
+            "electricity": self.electricity,
+            "water": self.water,
+            "algorithm": self.algorithm,
+            "people": [person.to_dict() for person in self.people],
+        }

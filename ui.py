@@ -14,6 +14,28 @@ class BillsUI:
     def __init__(self):
         self.console = Console()
 
+    def _prompt_int(self, prompt_text, default, min_value=None, max_value=None):
+        while True:
+            try:
+                value = int(Prompt.ask(prompt_text, default=str(default)))
+                if min_value is not None and value < min_value:
+                    raise ValueError(f"Giá trị phải >= {min_value}.")
+                if max_value is not None and value > max_value:
+                    raise ValueError(f"Giá trị phải <= {max_value}.")
+                return value
+            except ValueError as exc:
+                self.show_error(str(exc))
+
+    def _prompt_float(self, prompt_text, default, min_value=None):
+        while True:
+            try:
+                value = float(Prompt.ask(prompt_text, default=str(default)))
+                if min_value is not None and value < min_value:
+                    raise ValueError(f"Giá trị phải >= {min_value}.")
+                return value
+            except ValueError as exc:
+                self.show_error(str(exc))
+
     def clear(self):
         self.console.clear()
 
@@ -67,15 +89,15 @@ class BillsUI:
         else:
             self.console.print(Markdown("## Thời gian"))
             self.console.print(Markdown("> Năm"))
-            year = int(Prompt.ask("", default=str(curr_year)))
+            year = self._prompt_int("", curr_year, min_value=2000, max_value=curr_year + 1)
             self.console.print(Markdown("> Tháng"))
-            month = int(Prompt.ask("", default=str(curr_month)))
+            month = self._prompt_int("", curr_month, min_value=1, max_value=12)
 
         self.console.print(Markdown("## Hóa đơn điện nước"))
         self.console.print(Markdown("> Tổng tiền điện (VNĐ)"))
-        electricity = float(Prompt.ask("", default="0"))
+        electricity = self._prompt_float("", 0, min_value=0)
         self.console.print(Markdown("> Tổng tiền nước (VNĐ)"))
-        water = float(Prompt.ask("", default="0"))
+        water = self._prompt_float("", 0, min_value=0)
 
         return BillsData(year=year, month=month, electricity=electricity, water=water)
 
@@ -116,24 +138,33 @@ class BillsUI:
                 break
 
             self.console.print(Markdown("\n> Số ngày ở"))
-            stay_days = int(Prompt.ask("", default="0"))
+            stay_days = self._prompt_int("", 0, min_value=0)
             people.append(Person(name=name, stay_days=stay_days))
 
         return people
+
+    def confirm(self, message, default="n"):
+        choice = Prompt.ask(message, choices=["y", "n"], default=default)
+        return choice == "y"
 
     def input_algorithm_selection(self):
         """Allow user to select calculation algorithm interactively"""
         self.console.print(Markdown("\n## Chọn thuật toán tính tiền"))
         self.console.print(Markdown("1. **Tỷ lệ** (mặc định): Chia tiền theo tỷ lệ số ngày ở"))
         self.console.print(Markdown("2. **Bậc thang**: Người ở ít nhất trả cùng mức cơ bản, phần thêm chia đều"))
+        self.console.print(Markdown("3. **Bình quân**: Chia đều mỗi khoản tiền cho tất cả mọi người"))
         
         choice = Prompt.ask(
             "Chọn thuật toán",
-            choices=["1", "2"],
+            choices=["1", "2", "3"],
             default="1"
         )
         
-        return "ratio" if choice == "1" else "stair"
+        if choice == "2":
+            return "stair"
+        if choice == "3":
+            return "equal"
+        return "ratio"
 
     def show_algorithm_info(self, algorithm, algorithm_name):
         """Show information about the selected algorithm"""
@@ -141,6 +172,8 @@ class BillsUI:
         
         if algorithm == "stair":
             self.console.print("[dim]Thuật toán bậc thang: Người ở ít ngày nhất trả cùng mức cơ bản, số ngày thêm sẽ chia đều số tiền còn lại.[/dim]")
+        elif algorithm == "equal":
+            self.console.print("[dim]Thuật toán bình quân: Chia đều tiền điện và tiền nước cho tất cả mọi người.[/dim]")
         else:
             self.console.print("[dim]Thuật toán tỷ lệ: Chia tiền theo tỷ lệ số ngày ở của mỗi người.[/dim]")
 
@@ -156,7 +189,11 @@ class BillsUI:
         self.show_title()
 
         # Show algorithm information
-        algorithm_name = "Bậc Thang" if algorithm == "stair" else "Tỷ Lệ"
+        algorithm_name = {
+            "stair": "Bậc Thang",
+            "equal": "Bình Quân",
+            "ratio": "Tỷ Lệ",
+        }.get(algorithm, "Tỷ Lệ")
         self.console.print(f"[bold cyan]Thuật toán: {algorithm_name}[/bold cyan]")
 
         self.console.print(Markdown(f"# THÁNG {month} NĂM {year}"))
@@ -168,6 +205,7 @@ class BillsUI:
             table.add_column("Tiền Điện ⚡", justify="right")
         if total_water:
             table.add_column("Tiền Nước 💦", justify="right")
+        table.add_column("Tổng Cộng 💰", justify="right", style="bold yellow")
         table.add_column("Số Ngày Ở 🕛", justify="center")
 
         for i, p in enumerate(people):
@@ -176,6 +214,7 @@ class BillsUI:
                 row.append(f"{p.elec:,.0f} VNĐ")
             if total_water:
                 row.append(f"{p.water:,.0f} VNĐ")
+            row.append(f"[bold yellow]{(p.elec + p.water):,.0f} VNĐ[/bold yellow]")
             row.append(str(p.stay_days))
             table.add_row(*row)
 

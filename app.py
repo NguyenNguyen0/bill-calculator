@@ -21,12 +21,12 @@ class BillsApp:
             ctx: typer.Context,
             month: Optional[int] = typer.Option(None, "--month", "-m", help="Tháng tính tiền"),
             year: Optional[int] = typer.Option(None, "--year", "-y", help="Năm tính tiền"),
-            electric_bill: float = typer.Option(0, "--electric-bill", "-e", help="Tiền điện (VNĐ)"),
-            water_bill: float = typer.Option(0, "--water-bill", "-w", help="Tiền nước (VNĐ)"),
+            electric_bill: Optional[float] = typer.Option(None, "--electric-bill", "-e", help="Tiền điện (VNĐ)"),
+            water_bill: Optional[float] = typer.Option(None, "--water-bill", "-w", help="Tiền nước (VNĐ)"),
             people: Optional[List[str]] = typer.Option(None, "--people", "-p", help="Danh sách tên hoặc tên=ngày nghỉ"),
             load_file: Optional[str] = typer.Option(None, "--load-file", "-lf", help="Tải danh sách người từ file"),
             save_file: Optional[str] = typer.Option(None, "--save-file", "-sf", help="Lưu danh sách người vào file"),
-            algorithm: str = typer.Option("ratio", "--algorithm", "-a", help="Thuật toán tính tiền: 'ratio' (mặc định) hoặc 'stair'"),
+            algorithm: str = typer.Option("ratio", "--algorithm", "-a", help="Thuật toán tính tiền: 'ratio' (mặc định), 'stair' hoặc 'equal'"),
         ):
             try:
                 version = importlib.metadata.version("bills-calculator")
@@ -60,26 +60,37 @@ class BillsApp:
         bills_data = BillsData()
         people_list = []
         date_now = year is None and month is None
+        current_year, current_month = self.ui.get_date_now()
 
         try:
             # Validate algorithm
-            if algorithm not in ["ratio", "stair"]:
-                self.ui.show_error(f"Thuật toán không hợp lệ: {algorithm}. Sử dụng 'ratio' hoặc 'stair'.")
+            if algorithm not in ["ratio", "stair", "equal"]:
+                self.ui.show_error(f"Thuật toán không hợp lệ: {algorithm}. Sử dụng 'ratio', 'stair' hoặc 'equal'.")
                 return
 
             # Get bills data
-            if not electric_bill and not water_bill:
+            if electric_bill is None and water_bill is None:
                 bills_data = self.ui.input_month_year_and_bills(date_now)
                 # Ask for algorithm selection in interactive mode
                 if not people_input and not load_file:
                     algorithm = self.ui.input_algorithm_selection()
             else:
-                if date_now:
-                    year, month = self.ui.get_date_now()
-                bills_data.year = year
-                bills_data.month = month 
-                bills_data.electricity = electric_bill
-                bills_data.water = water_bill
+                bills_data.year = year if year is not None else current_year
+                bills_data.month = month if month is not None else current_month
+                if bills_data.year < 2000 or bills_data.year > current_year + 1:
+                    self.ui.show_error(f"Năm không hợp lệ: {bills_data.year}. Giá trị phải nằm trong khoảng 2000 - {current_year + 1}.")
+                    return
+                if bills_data.month < 1 or bills_data.month > 12:
+                    self.ui.show_error(f"Tháng không hợp lệ: {bills_data.month}. Giá trị phải nằm trong khoảng 1 - 12.")
+                    return
+                bills_data.electricity = electric_bill if electric_bill is not None else 0
+                bills_data.water = water_bill if water_bill is not None else 0
+                if bills_data.electricity < 0:
+                    self.ui.show_error("Tiền điện phải >= 0.")
+                    return
+                if bills_data.water < 0:
+                    self.ui.show_error("Tiền nước phải >= 0.")
+                    return
 
             # Get people data
             if load_file:
@@ -93,7 +104,11 @@ class BillsApp:
                 people_list = self.calculator.parse_people_input(people_input)
 
             # Show algorithm info
-            algorithm_name = "Thuật toán bậc thang" if algorithm == "stair" else "Thuật toán tỷ lệ"
+            algorithm_name = {
+                "stair": "Thuật toán bậc thang",
+                "equal": "Thuật toán bình quân",
+                "ratio": "Thuật toán tỷ lệ",
+            }.get(algorithm, "Thuật toán tỷ lệ")
             self.ui.show_algorithm_info(algorithm, algorithm_name)
 
             # Calculate bills
@@ -110,12 +125,18 @@ class BillsApp:
             
             # Display result
             self.ui.display_result(bills_data)
-                
-        except KeyboardInterrupt:
+
             if save_file:
                 self.storage.save_people_info(people_list, save_file)
                 self.ui.show_success("Đã lưu danh sách người vào file!")
-            
+            elif not people_input and not load_file:
+                if self.ui.confirm("Bạn có muốn lưu danh sách không?", default="n"):
+                    self.storage.save_people_info(people_list)
+                    self.ui.show_success("Đã lưu danh sách người vào file mặc định!")
+                
+        except ValueError as exc:
+            self.ui.show_error(str(exc))
+        except KeyboardInterrupt:
             self.ui.show_error("Chương trình đã thoát!")
     
     def run(self):

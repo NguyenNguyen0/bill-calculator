@@ -1,0 +1,5 @@
+# Legacy compatibility file. Use pyproject.toml and uv.lock as the source of truth.
+rich
+pyfiglet
+typer[all]
+pyinstaller

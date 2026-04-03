@@ -71,6 +71,18 @@ class BillsCalculator:
         
         return people
 
+    def calculate_equal_algorithm(self, people, total_elec, total_water, total_days=30):
+        """Calculate bills by splitting each bill equally across people"""
+        if not people:
+            return people
+
+        person_count = len(people)
+        for person in people:
+            person.elec = self.round_money(total_elec / person_count) if total_elec else 0
+            person.water = self.round_money(total_water / person_count) if total_water else 0
+
+        return people
+
     def calculate_bills(self, people, total_elec, total_water, total_days=30, algorithm="ratio"):
         """Calculate bills for each person using the specified algorithm
         
@@ -85,8 +97,10 @@ class BillsCalculator:
             return self.calculate_stair_algorithm(people, total_elec, total_water, total_days)
         elif algorithm == "ratio":
             return self.calculate_ratio_algorithm(people, total_elec, total_water, total_days)
+        elif algorithm == "equal":
+            return self.calculate_equal_algorithm(people, total_elec, total_water, total_days)
         else:
-            raise ValueError(f"Unknown algorithm: {algorithm}. Use 'ratio' or 'stair'.")
+            raise ValueError(f"Unknown algorithm: {algorithm}. Use 'ratio', 'stair' or 'equal'.")
     
     def parse_people_input(self, people_input):
         """Parse people input from command line"""

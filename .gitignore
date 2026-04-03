@@ -1,6 +1,5 @@
 /build
 /dist
-
-*.txt
 *.pyc
-*.spec
+__pycache__
+.venv/

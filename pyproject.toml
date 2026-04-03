@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "bills-calculator"
+version = "1.0.0"
+description = "A Python-based application to calculate electricity and water bills for shared accommodations."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "rich",
+    "pyfiglet",
+    "typer[all]",
+    "pyinstaller",
+]
+
+[project.scripts]
+bills-calculator = "bills_calculator.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["bills_calculator"]
+py-modules = ["__main__", "app", "calculator", "main", "models", "storage", "ui"]

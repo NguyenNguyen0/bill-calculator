@@ -8,13 +8,17 @@ class Person:
     @classmethod
     def from_dict(cls, data):
         person = cls(name=data["name"], stay_days=data["stay_days"])
-        if "stay_days" in data:
-            person.stay_days = data["stay_days"]
         if "elec" in data:
             person.elec = data["elec"]
         if "water" in data:
             person.water = data["water"]
         return person
+
+    def __repr__(self):
+        return (
+            f"Person(name={self.name!r}, stay_days={self.stay_days}, "
+            f"elec={self.elec}, water={self.water})"
+        )
     
     def to_dict(self):
         return {

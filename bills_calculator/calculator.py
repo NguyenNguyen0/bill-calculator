@@ -1,5 +1,5 @@
 import math
-from models import Person
+from .models import Person
 
 class BillsCalculator:
     @staticmethod

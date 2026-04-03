@@ -21,4 +21,3 @@ bills-calculator = "bills_calculator.__main__:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["bills_calculator"]
-py-modules = ["__main__", "app", "calculator", "main", "models", "storage", "ui"]

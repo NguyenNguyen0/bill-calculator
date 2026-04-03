@@ -11,7 +11,7 @@ icon = icon_path if os.path.exists(icon_path) else None
 
 
 a = Analysis(
-    ['__main__.py'],
+    ['bills_calculator/__main__.py'],
     pathex=[],
     binaries=[],
     datas=[

@@ -1,4 +1,4 @@
-from app import BillsApp
+from .app import BillsApp
 
 
 def main():

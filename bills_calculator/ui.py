@@ -8,7 +8,7 @@ from rich.panel import Panel
 from rich.text import Text
 from pyfiglet import Figlet
 import pyperclip
-from models import Person, BillsData
+from .models import Person, BillsData
 
 
 class BillsUI:

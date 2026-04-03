@@ -2,12 +2,12 @@ import typer
 from typing import List, Optional
 import importlib.metadata
 
-from models import BillsData
-from ui import BillsUI
-from calculator import BillsCalculator
-from storage import Storage
-from exporter import BillsExporter
-from history import BillsHistory
+from .models import BillsData
+from .ui import BillsUI
+from .calculator import BillsCalculator
+from .storage import Storage
+from .exporter import BillsExporter
+from .history import BillsHistory
 
 class BillsApp:
     def __init__(self):

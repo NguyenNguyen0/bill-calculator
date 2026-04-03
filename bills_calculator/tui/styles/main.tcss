@@ -1,0 +1,125 @@
+Screen {
+    background: #0a0f1f;
+    color: #dde8ff;
+}
+
+#layout {
+    height: 1fr;
+}
+
+#controls {
+    width: 45;
+    min-width: 38;
+    border: tall #4d74ff;
+    padding: 1;
+    background: #111936;
+}
+
+#outputs {
+    border: tall #7a4dff;
+    padding: 1;
+    background: #0d1430;
+}
+
+#hero {
+    height: auto;
+    margin-bottom: 1;
+    border: round #6d7eff;
+    padding: 0 1;
+    background: #101a3d;
+}
+
+.section-title {
+    margin: 1 0 0 0;
+    color: #95b8ff;
+    text-style: bold;
+}
+
+Input, Select {
+    margin: 0 0 1 0;
+    background: #0f1838;
+    border: tall #5566b0;
+}
+
+.row {
+    height: auto;
+    layout: horizontal;
+}
+
+.row > * {
+    width: 1fr;
+    margin-right: 1;
+}
+
+.row > *:last-child {
+    margin-right: 0;
+}
+
+.button-row {
+    height: auto;
+    layout: horizontal;
+    margin-bottom: 1;
+}
+
+.button-row Button {
+    width: 1fr;
+    margin-right: 1;
+}
+
+.button-row Button:last-child {
+    margin-right: 0;
+}
+
+#people-table {
+    height: 12;
+    margin-bottom: 1;
+}
+
+#result-view {
+    height: 1fr;
+    border: round #5d5bc2;
+    padding: 1;
+    margin-bottom: 1;
+    background: #111736;
+}
+
+Button {
+    background: #1a2d70;
+    color: #ebf0ff;
+    border: tall #5e73d6;
+}
+
+#hints {
+    color: #9aa4ce;
+    margin-top: 1;
+}
+
+#command-line {
+    margin-top: 1;
+}
+
+HistoryScreen {
+    background: #080d1c;
+}
+
+#history-root {
+    height: 1fr;
+    padding: 1;
+}
+
+#history-title {
+    text-style: bold;
+    color: #8fb0ff;
+    margin-bottom: 1;
+}
+
+#history-table {
+    height: 1fr;
+    margin-bottom: 1;
+    border: round #5d5bc2;
+    background: #0f1633;
+}
+
+#history-hint {
+    color: #9aa4ce;
+}

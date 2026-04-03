@@ -157,12 +157,13 @@ python -m bills_calculator history --year 2026 --month 4
 
 ## 📁 File Structure
 
-- 📦 `bills_calculator/models.py`: Contains data models for residents and bills.
-- 🧮 `bills_calculator/calculator.py`: Handles bill calculations.
-- 💾 `bills_calculator/storage.py`: Manages saving and loading resident data.
-- 🎨 `bills_calculator/ui.py`: Provides a rich-text user interface.
-- 🏠 `bills_calculator/app.py`: Main application logic.
-- 🚀 `bills_calculator/__main__.py`: Entry point for the application.
+- 🧠 `bills_calculator/core/`: Pure business logic (`calculator.py`, `models.py`, `constants.py`).
+- 💾 `bills_calculator/data/`: Data access layer (`storage.py`, `exporter.py`, `history.py`).
+- 🖥️ `bills_calculator/tui/`: Modular Textual UI (`app.py`, `screens/`, `widgets/`, `styles/main.tcss`).
+- 🧰 `bills_calculator/utils/`: Shared helper utilities.
+- 🎨 `bills_calculator/ui.py`: Legacy Rich interactive UI (kept for `--legacy-ui`).
+- 🏠 `bills_calculator/app.py`: CLI orchestration and mode routing.
+- 🚀 `bills_calculator/__main__.py`: Entry point (`python -m bills_calculator`).
 
 ## 📋 Requirements
 

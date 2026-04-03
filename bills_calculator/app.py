@@ -2,12 +2,12 @@ import typer
 from typing import List, Optional
 import importlib.metadata
 
-from .models import BillsData
+from .core.models import BillsData
 from .ui import BillsUI
-from .calculator import BillsCalculator
-from .storage import Storage
-from .exporter import BillsExporter
-from .history import BillsHistory
+from .core.calculator import BillsCalculator
+from .data.storage import Storage
+from .data.exporter import BillsExporter
+from .data.history import BillsHistory
 
 class BillsApp:
     def __init__(self):
@@ -60,7 +60,7 @@ class BillsApp:
 
                 if not legacy_ui and (tui or not has_cli_input):
                     try:
-                        from .tui_app import BillsTextualApp
+                        from .tui.app import BillsTextualApp
                     except ImportError:
                         self.ui.show_error(
                             "Không tìm thấy thư viện textual. Hãy cài dependency rồi thử lại."

@@ -71,8 +71,10 @@ bills-calculator
 ## 🧭 Textual TUI Quick Guide
 
 - Khu trái: nhập tháng/năm, tiền điện/nước, thuật toán, quản lý danh sách người ở.
-- Khu phải: preview kết quả (Rich table), bảng lịch sử, activity log thời gian thực.
+- Khu phải: preview kết quả (Rich table) để tập trung không gian tính toán.
+- Lịch sử được tách sang cửa sổ riêng, mở nhanh bằng nút `History` hoặc `Ctrl+H`.
 - Lưu/Tải người ở qua file path nhập trực tiếp trong UI.
+- Có command line nội bộ: `/calculate`, `/history`, `/reset`, `/export txt`, `/export csv`.
 
 ### ⌨️ Keyboard Shortcuts
 
@@ -83,6 +85,7 @@ bills-calculator
 - `Ctrl+H`: Refresh lịch sử
 - `Ctrl+R`: Reset form
 - `Ctrl+C`: Copy kết quả
+- `Ctrl+K`: Mở command palette
 - `Q`: Thoát app
 
 ## 🧮 Calculation Algorithms

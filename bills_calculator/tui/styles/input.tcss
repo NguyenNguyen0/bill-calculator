@@ -1,0 +1,24 @@
+CommandInput {
+    dock: bottom;
+    height: 3;
+    background: #282C34;
+    border-top: solid #4B5263;
+    padding: 0 1;
+}
+CommandInput Input {
+    background: #282C34;
+    border: none;
+    height: 1;
+    padding: 0 1;
+    color: #ABB2BF;
+    margin: 0;
+}
+CommandInput Input:focus {
+    border: none;
+}
+CommandInput #cmd-prefix {
+    width: 2;
+    height: 1;
+    color: #98C379;
+    padding: 1 0 0 0;
+}

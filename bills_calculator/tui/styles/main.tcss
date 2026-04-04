@@ -1,125 +1,105 @@
+/* ═══════════════════════════════════════════════════════
+   Bills Calculator TUI — main.tcss
+   Theme: Dark terminal, gemini-cli / claude-code style
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Global ──────────────────────────────────────────── */
 Screen {
-    background: #0a0f1f;
-    color: #dde8ff;
+    background: #282C34;
+    color: #ABB2BF;
+    layers: base overlay;
 }
 
-#layout {
+Header {
+    background: #282C34;
+    color: #61AFEF;
+    border-bottom: solid #3E4451;
+}
+
+Footer {
+    background: #282C34;
+    color: #5C6370;
+    border-top: solid #3E4451;
+}
+
+/* ── Content area ────────────────────────────────────── */
+#content-area {
     height: 1fr;
+    padding: 0 2;
+    overflow-y: auto;
+    scrollbar-color: #3E4451 #282C34;
+    scrollbar-size: 1 1;
 }
 
-#controls {
-    width: 45;
-    min-width: 38;
-    border: tall #4d74ff;
-    padding: 1;
-    background: #111936;
-}
-
-#outputs {
-    border: tall #7a4dff;
-    padding: 1;
-    background: #0d1430;
-}
-
+/* ── Figlet hero ─────────────────────────────────────── */
 #hero {
     height: auto;
-    margin-bottom: 1;
-    border: round #6d7eff;
-    padding: 0 1;
-    background: #101a3d;
+    margin: 1 0;
+    padding: 0;
 }
 
-.section-title {
-    margin: 1 0 0 0;
-    color: #95b8ff;
+/* ── RichLog output area ─────────────────────────────── */
+#output-log {
+    height: auto;
+    min-height: 10;
+    margin-bottom: 1;
+    padding: 0;
+    scrollbar-color: #3E4451 #282C34;
+}
+
+/* ── Command bar (docked bottom, above Footer) ───────── */
+CommandInput {
+    dock: bottom;
+    height: 3;
+    background: #282C34;
+    border-top: solid #4B5263;
+    padding: 0 2;
+    layout: horizontal;
+    align: left middle;
+}
+
+CommandInput #cmd-prefix {
+    width: 3;
+    color: #98C379;
     text-style: bold;
 }
 
-Input, Select {
-    margin: 0 0 1 0;
-    background: #0f1838;
-    border: tall #5566b0;
-}
-
-.row {
-    height: auto;
-    layout: horizontal;
-}
-
-.row > * {
+CommandInput Input {
+    background: #282C34;
+    border: none;
+    height: 1;
     width: 1fr;
-    margin-right: 1;
+    color: #ABB2BF;
 }
 
-.row > *:last-child {
-    margin-right: 0;
+CommandInput Input:focus {
+    border: none;
+    background: #282C34;
 }
 
-.button-row {
-    height: auto;
-    layout: horizontal;
-    margin-bottom: 1;
-}
-
-.button-row Button {
-    width: 1fr;
-    margin-right: 1;
-}
-
-.button-row Button:last-child {
-    margin-right: 0;
-}
-
-#people-table {
-    height: 12;
-    margin-bottom: 1;
-}
-
-#result-view {
-    height: 1fr;
-    border: round #5d5bc2;
-    padding: 1;
-    margin-bottom: 1;
-    background: #111736;
-}
-
-Button {
-    background: #1a2d70;
-    color: #ebf0ff;
-    border: tall #5e73d6;
-}
-
-#hints {
-    color: #9aa4ce;
-    margin-top: 1;
-}
-
-#command-line {
-    margin-top: 1;
-}
-
+/* ── History screen ──────────────────────────────────── */
 HistoryScreen {
-    background: #080d1c;
+    background: #282C34;
 }
 
 #history-root {
     height: 1fr;
-    padding: 1;
+    padding: 1 2;
 }
 
 #history-title {
     text-style: bold;
-    color: #8fb0ff;
+    color: #61AFEF;
     margin-bottom: 1;
 }
 
 #history-table {
     height: 1fr;
     margin-bottom: 1;
-    border: round #5d5bc2;
-    background: #0f1633;
+    border: round #3E4451;
+    background: #282C34;
 }
 
 #history-hint {
-    color: #9aa4ce;
+    color: #5C6370;
 }

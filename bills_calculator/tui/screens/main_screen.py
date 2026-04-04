@@ -47,6 +47,7 @@ HELP_TEXT = """\
   [bold #5C6370]/reset[/]                        Reset toàn bộ
   [bold #5C6370]/clear[/]                        Xoá log màn hình
   [bold #5C6370]/help[/]                         Hiển thị trợ giúp này
+  [bold #5C6370]/quit[/]                         Thoát ứng dụng
 """
 
 
@@ -152,6 +153,8 @@ class MainScreen(Screen):
             "/reset":   lambda _: self._cmd_reset(),
             "/clear":   lambda _: self.query_one("#output-log", RichLog).clear(),
             "/help":    lambda _: self._log(Text.from_markup(HELP_TEXT)),
+            "/quit":    lambda _: self.action_quit(),
+            "/exit":    lambda _: self.action_quit(),
         }
 
         handler = routes.get(cmd)

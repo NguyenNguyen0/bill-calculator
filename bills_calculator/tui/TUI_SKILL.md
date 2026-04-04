@@ -81,6 +81,7 @@ BORDER_ACCENT = "#61AFEF"  # Accent border
 |---------------------|----------------------------------------|
 | `/add <tên> <ngày>` | Thêm người, VD: `/add Nguyên 20`       |
 | `/rm <tên|số>`      | Xóa người theo tên hoặc số thứ tự      |
+| `/list`             | Hiển thị danh sách người               |
 | `/set elec <số>`    | Đặt tiền điện                          |
 | `/set water <số>`   | Đặt tiền nước                          |
 | `/set month <số>`   | Đặt tháng                              |
@@ -96,6 +97,9 @@ BORDER_ACCENT = "#61AFEF"  # Accent border
 | `/reset`            | Reset toàn bộ                          |
 | `/help`             | Hiển thị help                          |
 | `/clear`            | Xóa log trên màn hình                  |
+| `/quit` / `/exit`   | Thoát ứng dụng                         |
+
+**Autocomplete**: Gõ `/` để hiển thị danh sách lệnh với mô tả. Dùng ↓ để chọn, Tab để chấp nhận, Escape để ẩn.
 
 ## Widget structure
 
@@ -135,7 +139,18 @@ class CommandInput(Widget):
     # Placeholder: "Nhập lệnh... /help để xem danh sách"
     # Submit: Enter
     # History: ↑ ↓ để xem lịch sử lệnh đã nhập
+    # Autocomplete: Gõ "/" → hiển thị dropdown suggestion list
+    #   - ↓ để navigate vào list
+    #   - Tab để accept suggestion đầu tiên
+    #   - Enter trên suggestion để chọn
+    #   - Escape để ẩn suggestions
 ```
+
+**Autocomplete behavior**:
+- Khi user gõ "/", hiển thị ListView phía trên input với danh sách lệnh
+- Mỗi item: `[cmd (green)] [description (dim)]`
+- Filter theo prefix (VD: `/add` → chỉ show commands bắt đầu với `/add`)
+- Style giống gemini-cli: dark panel, hover highlight, keyboard navigation
 
 ## CSS conventions
 

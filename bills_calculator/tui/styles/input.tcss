@@ -1,10 +1,19 @@
 CommandInput {
     dock: bottom;
-    height: 3;
+    height: auto;
+    max-height: 25;
+    min-height: 3;
     background: #282C34;
     border-top: solid #4B5263;
-    padding: 0 1;
+    padding: 0;
 }
+
+#input-container {
+    height: 3;
+    padding: 0 1;
+    width: 100%;
+}
+
 CommandInput Input {
     background: #282C34;
     border: none;
@@ -13,12 +22,52 @@ CommandInput Input {
     color: #ABB2BF;
     margin: 0;
 }
+
 CommandInput Input:focus {
     border: none;
+    background: #282C34;
 }
+
 CommandInput #cmd-prefix {
     width: 2;
     height: 1;
     color: #98C379;
     padding: 1 0 0 0;
+}
+
+/* Suggestions list - appears BELOW input */
+#suggestions-list {
+    height: auto;
+    max-height: 15;
+    width: 100%;
+    background: #2C313A;
+    border: solid #4B5263;
+    padding: 0;
+    margin: 0 1 1 1;
+    scrollbar-color: #3E4451 #2C313A;
+}
+
+#suggestions-list.hidden {
+    display: none;
+    height: 0;
+}
+
+#suggestions-list > ListItem {
+    height: 1;
+    padding: 0 1;
+    background: #2C313A;
+}
+
+#suggestions-list > ListItem:hover {
+    background: #3E4451;
+}
+
+#suggestions-list > ListItem.-selected {
+    background: #3E4451;
+}
+
+#suggestions-list > ListItem > Label {
+    height: 1;
+    padding: 0;
+    background: transparent;
 }

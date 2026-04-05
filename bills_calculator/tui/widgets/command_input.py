@@ -52,13 +52,13 @@ class CommandInput(Widget):
         from textual.widgets import Label
         from textual.containers import Horizontal
         with Vertical():
+            yield ListView(id="suggestions-list", classes="hidden")
             with Horizontal(id="input-container"):
                 yield Label("> ", id="cmd-prefix")
                 yield Input(
                     placeholder="Nhập lệnh... /help để xem danh sách",
                     id="cmd-input",
                 )
-            yield ListView(id="suggestions-list", classes="hidden")
 
     def on_mount(self) -> None:
         """Initialize and ensure input has focus."""

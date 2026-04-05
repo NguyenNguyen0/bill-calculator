@@ -50,12 +50,11 @@ Footer {
 /* ── Command bar (docked bottom, above Footer) ───────── */
 CommandInput {
     dock: bottom;
-    height: 3;
+    height: auto;
+    min-height: 3;
     background: #282C34;
     border-top: solid #4B5263;
-    padding: 0 2;
-    layout: horizontal;
-    align: left middle;
+    padding: 0;
 }
 
 CommandInput #cmd-prefix {

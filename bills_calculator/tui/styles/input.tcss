@@ -35,7 +35,7 @@ CommandInput #cmd-prefix {
     padding: 1 0 0 0;
 }
 
-/* Suggestions list - appears BELOW input */
+/* Suggestions list - appears ABOVE input */
 #suggestions-list {
     height: auto;
     max-height: 15;
@@ -43,7 +43,7 @@ CommandInput #cmd-prefix {
     background: #2C313A;
     border: solid #4B5263;
     padding: 0;
-    margin: 0 1 1 1;
+    margin: 0 1 0 1;
     scrollbar-color: #3E4451 #2C313A;
 }
 

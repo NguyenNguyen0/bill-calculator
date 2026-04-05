@@ -8,6 +8,7 @@ from bills_calculator.tui.widgets.result_viewer import (
     build_plain_result,
 )
 from bills_calculator.tui.widgets.command_input import CommandInput
+from bills_calculator.tui.widgets.slash_suggest import SlashSuggest
 
 __all__ = [
     "build_gradient_figlet_title",
@@ -16,4 +17,5 @@ __all__ = [
     "build_result_renderable",
     "build_plain_result",
     "CommandInput",
+    "SlashSuggest",
 ]

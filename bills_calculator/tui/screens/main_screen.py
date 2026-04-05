@@ -15,6 +15,7 @@ from bills_calculator.data.exporter import BillsExporter
 from bills_calculator.data.history import BillsHistory
 from bills_calculator.data.storage import Storage
 from bills_calculator.tui.widgets.command_input import CommandInput
+from bills_calculator.tui.widgets.slash_suggest import SlashSuggest
 from bills_calculator.tui.widgets.header import build_gradient_figlet_title
 from bills_calculator.tui.widgets.result_viewer import (
     build_context_panel,
@@ -52,6 +53,8 @@ HELP_TEXT = """\
 
 
 class MainScreen(Screen):
+    LAYERS = ("base", "overlay")
+
     BINDINGS = [
         Binding("ctrl+enter", "calculate",     "Calculate",  show=True),
         Binding("ctrl+h",     "show_history",  "History",    show=True),
@@ -101,6 +104,67 @@ class MainScreen(Screen):
         self._print_context()
         self.query_one(CommandInput).focus_input()
 
+    # ── Slash suggest overlay ──────────────────────────────────────────────────
+
+    @property
+    def _suggest(self) -> SlashSuggest | None:
+        results = self.query(SlashSuggest)
+        return results.first() if results else None
+
+    def _show_suggest(self, prefix: str) -> None:
+        """Mount hoặc cập nhật overlay suggest."""
+        s = self._suggest
+        if s is None:
+            s = SlashSuggest()
+            self.mount(s)
+        s.update(prefix)
+        # Ẩn nếu không có match nào
+        if not s.matches:
+            self._hide_suggest()
+
+    def _hide_suggest(self) -> None:
+        """Unmount overlay nếu đang hiển thị."""
+        s = self._suggest
+        if s is not None:
+            s.remove()
+
+    # ── CommandInput message handlers ──────────────────────────────────────────
+
+    def on_command_input_slash_typed(self, event: CommandInput.SlashTyped) -> None:
+        self._show_suggest(event.prefix)
+
+    def on_command_input_slash_cleared(self, event: CommandInput.SlashCleared) -> None:
+        self._hide_suggest()
+
+    def on_command_input_navigate_suggest(self, event: CommandInput.NavigateSuggest) -> None:
+        s = self._suggest
+        if s is not None:
+            s.focus_list()
+
+    def on_command_input_tab_complete(self, event: CommandInput.TabComplete) -> None:
+        s = self._suggest
+        if s is not None:
+            cmd = s.first_match()
+            if cmd:
+                self._hide_suggest()
+                bar = self.query_one(CommandInput)
+                bar.set_value(cmd + " ")
+                bar.focus_input()
+
+    def on_slash_suggest_selected(self, event: SlashSuggest.Selected) -> None:
+        """User chọn item trong suggest list."""
+        self._hide_suggest()
+        bar = self.query_one(CommandInput)
+        bar.set_value(event.command + " ")
+        bar.focus_input()
+
+    # Khi focus rời khỏi suggest list mà không chọn → trả focus về input
+    def on_key(self, event) -> None:
+        if event.key == "escape":
+            self._hide_suggest()
+            self.query_one(CommandInput).focus_input()
+            event.prevent_default()
+
     # ── Log helpers ────────────────────────────────────────────────────────────
 
     def _log(self, renderable) -> None:
@@ -128,6 +192,7 @@ class MainScreen(Screen):
     # ── Command dispatch ───────────────────────────────────────────────────────
 
     def on_command_input_command_submitted(self, event: CommandInput.CommandSubmitted) -> None:
+        self._hide_suggest()
         self._dispatch(event.command)
 
     def _dispatch(self, raw: str) -> None:

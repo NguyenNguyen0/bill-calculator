@@ -7,7 +7,6 @@
 Screen {
     background: #282C34;
     color: #ABB2BF;
-    layers: base overlay;
 }
 
 Header {
@@ -47,34 +46,7 @@ Footer {
     scrollbar-color: #3E4451 #282C34;
 }
 
-/* ── Command bar (docked bottom, above Footer) ───────── */
-CommandInput {
-    dock: bottom;
-    height: auto;
-    min-height: 3;
-    background: #282C34;
-    border-top: solid #4B5263;
-    padding: 0;
-}
-
-CommandInput #cmd-prefix {
-    width: 3;
-    color: #98C379;
-    text-style: bold;
-}
-
-CommandInput Input {
-    background: #282C34;
-    border: none;
-    height: 1;
-    width: 1fr;
-    color: #ABB2BF;
-}
-
-CommandInput Input:focus {
-    border: none;
-    background: #282C34;
-}
+/* ── Command bar — CSS handled via DEFAULT_CSS in CommandInput widget ── */
 
 /* ── History screen ──────────────────────────────────── */
 HistoryScreen {
